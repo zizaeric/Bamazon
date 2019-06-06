@@ -13,7 +13,7 @@ Bamazon is an Amazon-like storefront node.js CLI application that uses the inqui
   
   **Welcome message and initial prompt**
 
-  ![Welcome message and initial prompt](./Bamazon/images/welcomeMessageAndPrompt.png);
+  ![Welcome message and initial prompt](./Bamazon/images/welcomeMessageAndPrompt.png?raw=true);
 
     * use arrow up or arrow down to select your answer,
     (you may also use numbers 1 or 2)
@@ -41,7 +41,8 @@ The screenshots below take you through Bamazon functionality after chosing to bu
 
     * Only accepts numbers between 1 and 10.
 
-    * user is prompted to enter an ID number between 1 and 10 if Null, NaN, 0, or a number greater than 10 is entered for Item ID.
+    * user is prompted to enter an ID number between 1 and 10 if 
+      * Null, NaN, 0, or a number greater than 10 is entered for Item ID.
 
   ![Enter Item ID](./Bamazon/images/enterItemId.png);
 
@@ -86,7 +87,7 @@ The screenshots below take you through Bamazon functionality after chosing to bu
   ![Item ID 6 transaction](./Bamazon/images/itemIdSixTransaction.png);
 
   ![Item ID 6 final count](./Bamazon/images/databaseFinalCount.png);
-  
+
 
 
 
