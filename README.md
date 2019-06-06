@@ -10,7 +10,9 @@ Bamazon is an Amazon-like storefront node.js CLI application that uses the inqui
   `node bamazonCustomerView.js` and press enter (must do npm install first).
 
   2. You'll see a welcome to Bamazon message and a prompt asking what you'd like to do.
+  
   **Welcome message and initial prompt**
+  
   ![Welcome message and initial prompt](./Bamazon/images/welcomeMessageAndPrompt.png);
     * use arrow up or arrow down to select your answer,
     (you may also use numbers 1 or 2)
@@ -52,6 +54,12 @@ The screenshots below take you through Bamazon functionality after chosing to bu
 
   The user is then asked what they'd like to do next, continue shopping or exit Bamazon.
   ![Successful Sale](./Bamazon/images/successulSale.png);
+
+  6. **Database updated after purchase**
+  The database is updated after each successful transaction to reflect available quantities.
+  ![Item ID 6 initial count](./Bamazon/images/databaseInitialCount.png);
+  ![Item ID 6 transaction](./Bamazon/images/itemIdSixTransaction.png);
+  ![Item ID 6 final count](./Bamazon/images/databaseFinalCount.png);
 
 
 
