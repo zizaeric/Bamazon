@@ -90,10 +90,10 @@ function promptUserPurchase() {
             name: "item_id",
             message: "Please enter the ID of the item you want to buy.",
             validate: function(val) {
-                if (isNaN(val) === false && val <= 10) {
+                if (isNaN(val) === false && val > 0 && val <= 10) {
                     return true;
                 } else {
-                    console.log("\nPlease enter a number between 0 and 10 for Item ID.");
+                    console.log("\n\nPlease enter a number between 1 and 10 for Item ID.");
                     return false;
                 }
             }
@@ -103,29 +103,43 @@ function promptUserPurchase() {
             name: "quantity",
             message: "\nHow many units would you like to buy?",
             validate: function(val) {
-                if (isNaN(val) === false) {
+                if (isNaN(val) === false && val > 0) {
                     return true;
                 } else {
-                    console.log("\nPlease enter a number for quantity.");
+                    console.log("\n\nPlease enter a number for quantity.");
                     return false;
                 }
             }
         }
     ]).then(function(itemAndQuantity) {
-        console.log(itemAndQuantity);
+        // console.log(itemAndQuantity);
         var queryStr = "SELECT * FROM products WHERE item_id = ?";
         connection.query(queryStr, itemAndQuantity.item_id, function(err, res) {
+            var purchasedItem = res[0];
             if (err) throw err;
-            console.log(res[0]);
-            console.log(itemAndQuantity.quantity);
-            console.log(res[0].stock_quantity);
-            if (itemAndQuantity.quantity > res[0].stock_quantity) {
-                console.log("Sorry, the most we have of that item is: " + res[0].stock_quantity);
+            // console.log(res[0]);
+            // console.log(itemAndQuantity.quantity);
+            // console.log(res[0].stock_quantity);
+            if (itemAndQuantity.quantity > purchasedItem.stock_quantity) {
+                console.log("Sorry, the most we have of that item is: " + purchasedItem.stock_quantity);
                 welcomeToBamazon();
+                return;
             }
-            if (!res[0]) {
-                console.log("Oops! You forgot to select an item to purchase! \n Please enter item ID of the product you'd like to buy.");
-            }
-        })
-    })
+            fulfillCustomerOrder(itemAndQuantity, purchasedItem);
+        });
+    });
+}
+
+//------------------------ fulfillCustomerOrder -----------------------------
+// Updates SQL database to reflect remaining quantities and shows customer total cost of purchase
+
+function fulfillCustomerOrder(itemAndQuantity, purchasedItem) {
+    // console.log(itemAndQuantity);
+    // console.log(purchasedItem);
+    var queryStr = "UPDATE products SET stock_quantity = stock_quantity - ? WHERE item_id = ?";
+    connection.query(queryStr, [itemAndQuantity.quantity, itemAndQuantity.item_id], function(err, res) {
+        //  console.log(res);
+         console.log("\nThank you for shopping with us. \nYou have successfully purchased " + itemAndQuantity.quantity + " " + purchasedItem.product_name + " units." + "\nYour total is $" + purchasedItem.price * itemAndQuantity.quantity + ".\n");
+         welcomeToBamazon();
+     });
 }
