@@ -23,6 +23,7 @@ connection.connect(function(err) {
 //--------------------------- Bamazon Functions -----------------------------
 
 //----------------- welcomeToBamazon -----------------------------------------
+// Asks user what they'd like to do and offers two options
 function welcomeToBamazon() {
     var welcomeMessagePrompt = [
         {
@@ -73,8 +74,58 @@ function displayAvailableItems() {
             table.push(
                 [res[i].item_id, res[i].product_name, "$" + res[i].price]
             );
-        };
+        }
         console.log(table.toString());
+        promptUserPurchase();
+	});
+}
 
-	})
+//------------------------- promptUserPurchase() ----------------------------
+// Asks user for Id number of the item they'd like to purchse and quantity
+
+function promptUserPurchase() {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "item_id",
+            message: "Please enter the ID of the item you want to buy.",
+            validate: function(val) {
+                if (isNaN(val) === false && val <= 10) {
+                    return true;
+                } else {
+                    console.log("\nPlease enter a number between 0 and 10 for Item ID.");
+                    return false;
+                }
+            }
+        },
+        {
+            type: "input",
+            name: "quantity",
+            message: "\nHow many units would you like to buy?",
+            validate: function(val) {
+                if (isNaN(val) === false) {
+                    return true;
+                } else {
+                    console.log("\nPlease enter a number for quantity.");
+                    return false;
+                }
+            }
+        }
+    ]).then(function(itemAndQuantity) {
+        console.log(itemAndQuantity);
+        var queryStr = "SELECT * FROM products WHERE item_id = ?";
+        connection.query(queryStr, itemAndQuantity.item_id, function(err, res) {
+            if (err) throw err;
+            console.log(res[0]);
+            console.log(itemAndQuantity.quantity);
+            console.log(res[0].stock_quantity);
+            if (itemAndQuantity.quantity > res[0].stock_quantity) {
+                console.log("Sorry, the most we have of that item is: " + res[0].stock_quantity);
+                welcomeToBamazon();
+            }
+            if (!res[0]) {
+                console.log("Oops! You forgot to select an item to purchase! \n Please enter item ID of the product you'd like to buy.");
+            }
+        })
+    })
 }
